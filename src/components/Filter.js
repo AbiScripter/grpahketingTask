@@ -26,7 +26,7 @@ const Filter = () => {
 
   return (
     <div>
-      <h2>Filter</h2>
+      <h2 className="text-red-500">Filter</h2>
       <div>
         <h3 onClick={handleStatusAccordian}>Status</h3>
         {isStatusOpen && <StatusFilter />}
