@@ -1,12 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
+import { FaFilter, FaChevronDown } from "react-icons/fa6";
+import { MdClose } from "react-icons/md";
+
 import {
-  handleStatusCheckboxChange,
-  handleDepartmentCheckboxChange,
+  revertFilterModal,
   revertDepartMentAccordian,
   revertStatusAccordian,
-} from "../tSlice";
+} from "../redux/tSlice";
+
+import StatusFilter from "./StatusFilter";
+import DepartmentFilter from "./DepartmenFilter";
+import "./Filter.css";
 
 const Filter = () => {
+  const isFilterModalOpen = useSelector(
+    (state) => state.tableApp.tableApp.filerModalOpen
+  );
   const isStatusOpen = useSelector(
     (state) => state.tableApp.tableApp.statusOpen
   );
@@ -24,141 +33,58 @@ const Filter = () => {
     dispatch(revertStatusAccordian());
   }
 
-  return (
-    <div>
-      <h2 className="text-red-500">Filter</h2>
-      <div>
-        <h3 onClick={handleStatusAccordian}>Status</h3>
-        {isStatusOpen && <StatusFilter />}
-      </div>
-      <div>
-        <h3 onClick={handleDepartmentAccordian}>Department</h3>
-        {isDepartmentOpen && <DepartmentFilter />}
-      </div>
-    </div>
-  );
-};
-
-const StatusFilter = () => {
-  const selectedStatuses = useSelector(
-    (state) => state.tableApp.tableApp.selectedStatuses
-  );
-  const dispatch = useDispatch();
-
-  function handleCheckboxChange(e) {
-    let { value, checked } = e.target;
-    dispatch(handleStatusCheckboxChange({ value, checked }));
+  function handleFilterModal() {
+    dispatch(revertFilterModal());
   }
 
   return (
-    <div>
-      <div>
-        <label>Active</label>
-        <input
-          type="checkbox"
-          value={"active"}
-          onChange={handleCheckboxChange}
-          checked={selectedStatuses.includes("active")}
-        />
-      </div>
-      <div>
-        <label>Inactive</label>
-        <input
-          type="checkbox"
-          value={"inactive"}
-          onChange={handleCheckboxChange}
-          checked={selectedStatuses.includes("inactive")}
-        />
-      </div>
-      <div>
-        <label>Blocked</label>
-        <input
-          type="checkbox"
-          value={"blocked"}
-          onChange={handleCheckboxChange}
-          checked={selectedStatuses.includes("blocked")}
-        />
-      </div>
-      <div>
-        <label>Suspended</label>
-        <input
-          type="checkbox"
-          value={"suspended"}
-          onChange={handleCheckboxChange}
-          checked={selectedStatuses.includes("suspended")}
-        />
-      </div>
-    </div>
-  );
-};
+    <div className="filter-container">
+      <button onClick={handleFilterModal} className="text-primary font-bold">
+        <FaFilter />
+      </button>
 
-const DepartmentFilter = () => {
-  const selectedDepartments = useSelector(
-    (state) => state.tableApp.tableApp.selectedDepartments
-  );
-  const dispatch = useDispatch();
+      {/* Modal */}
+      {isFilterModalOpen && (
+        <div className="modal-overlay" onClick={handleFilterModal}>
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking inside
+          >
+            {/* Modal Header */}
+            <div className="modal-header">
+              <p className="font-bold text-lg">Data Filters</p>
+              <MdClose onClick={handleFilterModal} className="modal-close" />
+            </div>
 
-  function handleCheckboxChange(e) {
-    let { value, checked } = e.target;
-    dispatch(handleDepartmentCheckboxChange({ value, checked }));
-  }
+            {/* Modal Body */}
+            <div className="modal-body">
+              {/* Status Accordian */}
+              <div className="border-b-2 pb-2">
+                <h3
+                  className="cursor-pointer flex justify-between items-center gap-5"
+                  onClick={handleStatusAccordian}
+                >
+                  <p className="font-semibold">Status</p>
+                  <p>{isStatusOpen ? <MdClose /> : <FaChevronDown />}</p>
+                </h3>
+                {isStatusOpen && <StatusFilter />}
+              </div>
 
-  return (
-    <div>
-      <div>
-        <label>Finance</label>
-        <input
-          type="checkbox"
-          value={"finance"}
-          onChange={handleCheckboxChange}
-          checked={selectedDepartments.includes("finance")}
-        />
-      </div>
-      <div>
-        <label>Engineer</label>
-        <input
-          type="checkbox"
-          value={"engineer"}
-          onChange={handleCheckboxChange}
-          checked={selectedDepartments.includes("engineer")}
-        />
-      </div>
-      <div>
-        <label>Science</label>
-        <input
-          type="checkbox"
-          value={"science"}
-          onChange={handleCheckboxChange}
-          checked={selectedDepartments.includes("science")}
-        />
-      </div>
-      <div>
-        <label>Arts</label>
-        <input
-          type="checkbox"
-          value={"arts"}
-          onChange={handleCheckboxChange}
-          checked={selectedDepartments.includes("arts")}
-        />
-      </div>
-      <div>
-        <label>Math</label>
-        <input
-          type="checkbox"
-          value={"math"}
-          onChange={handleCheckboxChange}
-          checked={selectedDepartments.includes("math")}
-        />
-      </div>
-      <div>
-        <label>History</label>
-        <input
-          type="checkbox"
-          value={"history"}
-          onChange={handleCheckboxChange}
-          checked={selectedDepartments.includes("history")}
-        />
-      </div>
+              {/* Departments Accordian */}
+              <div>
+                <h3
+                  className="cursor-pointer flex justify-between items-center gap-5"
+                  onClick={handleDepartmentAccordian}
+                >
+                  <p className="font-semibold">Department</p>
+                  <p>{isDepartmentOpen ? <MdClose /> : <FaChevronDown />}</p>
+                </h3>
+                {isDepartmentOpen && <DepartmentFilter />}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

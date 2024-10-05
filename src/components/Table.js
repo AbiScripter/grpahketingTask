@@ -1,26 +1,25 @@
-import { useDispatch, useSelector } from "react-redux";
-import { changePage, selectPaginatedData } from "../tSlice";
+import { useSelector } from "react-redux";
+import { selectPaginatedData } from "../redux/tSlice";
+import { FaAngleRight } from "react-icons/fa6";
+import StatusIndicator from "./StatusIndicator";
+
 const Table = () => {
   // const filteredData = useSelector(
   //   (state) => state.tableApp.tableApp.filteredData
   // );
 
-  const dispatch = useDispatch();
   const paginatedData = useSelector(selectPaginatedData);
-  const currentPage = useSelector(
-    (state) => state.tableApp.tableApp.currentPage
-  );
-  const totalPages = useSelector((state) => state.tableApp.tableApp.totalPages);
 
-  const handlePageChange = (page) => {
-    dispatch(changePage(page));
-  };
+  if (paginatedData.length === 0) {
+    return <h1 className="font-bold text-xl">No Records Found</h1>;
+  }
 
   return (
     <div>
-      <table border={1} cellPadding={5} cellSpacing={3}>
-        <thead>
-          <tr>
+      {/* Table */}
+      <table cellPadding={15} className="border-white">
+        <thead className="bg-blue-800 text-white">
+          <tr className="border-b border-white-200">
             <th>RecordID</th>
             <th>Teacher Name</th>
             <th>Teacher Id</th>
@@ -32,48 +31,28 @@ const Table = () => {
         </thead>
         <tbody>
           {paginatedData.map((t) => (
-            <tr key={t.recordId}>
+            <tr key={t.recordId} className="border-b-2">
               <td>{t.recordId}</td>
               <td>{t.teacherName}</td>
               <td>{t.teacherId}</td>
               <td>{t.department}</td>
               <td>{t.student}</td>
-              <td>{t.status}</td>
-              <td>View More</td>
+              <td>
+                <div className="flex gap-2 items-center">
+                  {t.status}
+                  <StatusIndicator status={t.status} />
+                </div>
+              </td>
+              <td className="text-blue-800">
+                <div className="flex items-center">
+                  <p>View More</p>
+                  <FaAngleRight />
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div>
-        <button
-          disabled={currentPage === 1}
-          onClick={() => handlePageChange(currentPage - 1)}
-        >
-          Previous
-        </button>
-        <span>{` Page ${currentPage} of ${totalPages} `}</span>
-        <div>
-          {Array(totalPages)
-            .fill(0)
-            .map((p, i) => (
-              <button
-                style={{
-                  backgroundColor: `${currentPage === i + 1 ? "blue" : ""}`,
-                }}
-                onClick={() => handlePageChange(i + 1)}
-                key={i}
-              >
-                {i + 1}
-              </button>
-            ))}
-        </div>
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => handlePageChange(currentPage + 1)}
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 };

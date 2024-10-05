@@ -5,7 +5,7 @@ const teacherData = [
     teacherId: 10001,
     department: "Finance",
     student: 20,
-    status: "Active",
+    status: "Blocked", // Changed to Blocked
   },
   {
     recordId: 2,
@@ -109,7 +109,7 @@ const teacherData = [
     teacherId: 10014,
     department: "History",
     student: 17,
-    status: "Inactive",
+    status: "Blocked", // Changed to Blocked
   },
   {
     recordId: 15,
@@ -197,7 +197,7 @@ const teacherData = [
     teacherId: 10025,
     department: "Math",
     student: 24,
-    status: "Inactive",
+    status: "Blocked", // Changed to Blocked
   },
   {
     recordId: 26,
@@ -261,7 +261,7 @@ const teacherData = [
     teacherId: 10033,
     department: "Engineer",
     student: 20,
-    status: "Active",
+    status: "Blocked", // Changed to Blocked
   },
   {
     recordId: 34,

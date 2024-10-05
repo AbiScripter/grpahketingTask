@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import teacherData from "./assets/teacherData";
+import teacherData from "../assets/teacherData";
 
 const initialState = {
   tableApp: {
@@ -7,6 +7,7 @@ const initialState = {
     selectedStatuses: [],
     selectedDepartments: [],
     filteredData: teacherData,
+    filerModalOpen: false,
     statusOpen: false,
     departmentOpen: false,
     currentPage: 1, // Track the current page
@@ -19,6 +20,11 @@ const TableSlice = createSlice({
   name: "tableApp",
   initialState: initialState,
   reducers: {
+    handleSearchTermChange: (state, action) => {
+      console.log(action.payload);
+      state.tableApp.searchTerm = action.payload;
+    },
+
     updateFilterData: (state, action) => {
       state.tableApp.filteredData = action.payload;
       // Update totalPages whenever filteredData is updated
@@ -73,6 +79,10 @@ const TableSlice = createSlice({
       state.tableApp.departmentOpen = !state.tableApp.departmentOpen;
     },
 
+    revertFilterModal: (state) => {
+      state.tableApp.filerModalOpen = !state.tableApp.filerModalOpen;
+    },
+
     changePage(state, action) {
       state.tableApp.currentPage = action.payload;
     },
@@ -88,8 +98,10 @@ export const selectPaginatedData = (state) => {
 
 export const {
   updateFilterData,
+  handleSearchTermChange,
   handleDepartmentCheckboxChange,
   handleStatusCheckboxChange,
+  revertFilterModal,
   revertDepartMentAccordian,
   revertStatusAccordian,
   changePage,
